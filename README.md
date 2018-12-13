@@ -1,5 +1,6 @@
 # web_gamepad_api
-A HTML5+ECMAScript Gamepad API tester program. The program shows graphical or raw data of multiple game-controller devices connected on your pc, android, etc.
+A HTML5+ECMAScript Gamepad API tester program.
+The program shows graphical or raw data of multiple game-controller devices connected on your pc, android, etc.
 
 ### 【内容】
 
@@ -7,7 +8,7 @@ HTML5+ECMAScript による Gamepad API の動作確認プログラム
 
 ### 【操作】
 
-doc/index.html を Gamepad API に対応したブラウザ(Chrome/FireFox等)で開くと接続されているゲームコントローラーの情報を表示する。
+index.html を Gamepad API に対応したブラウザ(Chrome/FireFox等)で開くと接続されているゲームコントローラーの情報を表示する。
 
 複数のコントローラーが接続されている場合は左のプルダウンメニューからコントローラーを選択できる。
 
