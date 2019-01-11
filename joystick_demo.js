@@ -1,7 +1,7 @@
 /*
  * Gamepad API demonstration ECMAScript by DigiSapo
  *
- * Copyright (c) 2018 DigiSapo(http://www.plaza14.biz/blogs/digisapo/)
+ * Copyright (c) 2018 DigiSapo(http://www.plaza14.biz/sitio_digisapo/)
  * This software is released under the MIT License:
  * 
  * Permission is hereby granted, free of charge, to any person obtaining a copy

@@ -21,7 +21,7 @@ Gamepad APIに対応していないブラウザ(Safariなど)も多く、また�
 ### 【外部リンク】
 
 関連ブログ記事:
-
+https://plaza14.biz/sitio_digisapo/tech/20180805-html5-testing-gamepad-api/
 
 ### - LICENSE -
 
