@@ -458,7 +458,15 @@ JoystickPanel.updateGamepadData = function () {
           knob.style.top = hat_y + "rem";
         } else if (a_cnf.type == "Text") {
           var xy_value = document.getElementById("axis_value_" + a_cnf.n);
-          xy_value.innerHTML = eval(a_cnf.f) + `<div style='width: 200px;text-align: right;'>${JoystickPanel.axesXCount}: XCount</div><div style='width: 200px;text-align: right;'>${JoystickPanel.axesYCount}: YCount</div>`;
+          let backgroundColorX = ''
+          if(Math.abs(JoystickPanel.axesXLastStatus) > 0.7) {
+            backgroundColorX = 'background-color: rgb(255, 96, 96);'
+          }
+          let backgroundColorY = ''
+          if(Math.abs(JoystickPanel.axesYLastStatus) > 0.7) {
+            backgroundColorY = 'background-color: rgb(255, 96, 96);'
+          }
+          xy_value.innerHTML = eval(a_cnf.f) + `<div style='width: 200px;text-align: right; ${backgroundColorX}'>${JoystickPanel.axesXCount}: XCount</div><div style='width: 200px;text-align: right; ${backgroundColorY}'>${JoystickPanel.axesYCount}: YCount</div>`;
         }
       }
     }
