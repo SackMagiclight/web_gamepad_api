@@ -30,6 +30,10 @@
 var JoystickPanel = {
   buttonCount: new Array(100).fill(0),
   buttonLastStatus: new Array(100).fill(false),
+  axesXCount: 0,
+  axesXLastStatus: false,
+  axesYCount: 0,
+  axesYLastStatus: false,
   numConnected: 0,
   selectedGamepadUID: null,
   graphicalMode: true,
@@ -81,6 +85,10 @@ var JoystickPanel = {
 function resetClick() {
   JoystickPanel.buttonCount = new Array(100).fill(0);
   JoystickPanel.buttonLastStatus = new Array(100).fill(false);
+  JoystickPanel.axesXCount = 0;
+  JoystickPanel.axesXLastStatus = false;
+  JoystickPanel.axesYCount = 0;
+  JoystickPanel.axesYLastStatus = false;
 }
 
 JoystickPanel.buildInterface = function () {
@@ -191,9 +199,9 @@ JoystickPanel.buildInterface = function () {
             f:
               '"#' +
               i +
-              ' =&ensp;"+axis_value_2_str(x,8,5)+"<br/>#' +
+              ' =&ensp;"+axis_value_2_str(x,8,5,' + i + ')+"<br/>#' +
               pair_idx +
-              ' =&ensp;"+axis_value_2_str(y,8,5)',
+              ' =&ensp;"+axis_value_2_str(y,8,5,' + i + ')',
           });
           result +=
             '<div class="axis_block">' +
@@ -222,7 +230,7 @@ JoystickPanel.buildInterface = function () {
             type: "Text",
             index: i,
             n: i,
-            f: '"#' + i + ' =&ensp;"+axis_value_2_str(hat,8,5)',
+            f: '"#' + i + ' =&ensp;"+axis_value_2_str(hat,8,5,' + i + ')',
           });
           result +=
             '<div class="axis_block">' +
@@ -245,7 +253,7 @@ JoystickPanel.buildInterface = function () {
             type: "Text",
             index: i,
             n: i,
-            f: '"#' + i + ' =<br/>&ensp;"+axis_value_2_str(thr,8,5)',
+            f: '"#' + i + ' =<br/>&ensp;"+axis_value_2_str(thr,8,5,' + i + ')',
           });
           result +=
             '<div class="axis_block">' +
@@ -268,7 +276,7 @@ JoystickPanel.buildInterface = function () {
             type: "Text",
             index: i,
             n: i,
-            f: '"#' + i + ' =&ensp;"+axis_value_2_str(yaw,8,5)',
+            f: '"#' + i + ' =&ensp;"+axis_value_2_str(yaw,8,5,' + i + ')',
           });
           result +=
             '<div class="axis_block_no_inline">' +
@@ -407,10 +415,26 @@ JoystickPanel.updateGamepadData = function () {
         a_cnf = this.configAxes[i];
         if (a_cnf.type == "X") {
           x = gamepad.axes[a_cnf.index];
+          const status = Math.abs(x) > 0.7;
+          const lastStatus = Math.abs(JoystickPanel.axesXLastStatus) > 0.7;
+          if(!lastStatus && status) {
+            JoystickPanel.axesXCount = JoystickPanel.axesXCount + 1;
+          } else if (Math.abs(JoystickPanel.axesXLastStatus - x) > 1.4) {
+            JoystickPanel.axesXCount = JoystickPanel.axesXCount + 1;
+          }
+          JoystickPanel.axesXLastStatus = x
           var knob = document.getElementById("xy_knob_" + a_cnf.n);
           knob.style.left = eval(a_cnf.f) + "rem";
         } else if (a_cnf.type == "Y") {
           y = gamepad.axes[a_cnf.index];
+          const status = Math.abs(y) > 0.7;
+          const lastStatus = Math.abs(JoystickPanel.axesYLastStatus) > 0.7;
+          if(!lastStatus && status) {
+            JoystickPanel.axesYCount = JoystickPanel.axesYCount + 1;
+          } else if (Math.abs(JoystickPanel.axesYLastStatus - y) > 1.4) {
+            JoystickPanel.axesYCount = JoystickPanel.axesYCount + 1;
+          }
+          JoystickPanel.axesYLastStatus = y
           knob.style.top = eval(a_cnf.f) + "rem";
         } else if (a_cnf.type == "Thr") {
           thr = gamepad.axes[a_cnf.index];
@@ -434,7 +458,7 @@ JoystickPanel.updateGamepadData = function () {
           knob.style.top = hat_y + "rem";
         } else if (a_cnf.type == "Text") {
           var xy_value = document.getElementById("axis_value_" + a_cnf.n);
-          xy_value.innerHTML = eval(a_cnf.f);
+          xy_value.innerHTML = eval(a_cnf.f) + `<div style='width: 200px;text-align: right;'>${JoystickPanel.axesXCount}: XCount</div><div style='width: 200px;text-align: right;'>${JoystickPanel.axesYCount}: YCount</div>`;
         }
       }
     }
@@ -466,7 +490,7 @@ JoystickPanel.updateGamepadData = function () {
         }
         var button_box = document.getElementById("btn_" + i);
         button_box.style.backgroundColor = col;
-        button_box.innerHTML = `B${i}: ${JoystickPanel.buttonCount[i]}`;
+        button_box.innerHTML = `<div>B${i}: </div><div style='width: 200px;text-align: right;'>${JoystickPanel.buttonCount[i]}</div>`;
       }
     }
   } else {
@@ -542,7 +566,8 @@ JoystickPanel.updateTimerStop = function () {
 //
 //
 
-function axis_value_2_str(v, dig, dig_frac) {
+function axis_value_2_str(v, dig, dig_frac, num) {
+  // console.log(v, dig, dig_frac, num)
   return (Array(dig + 1).join(" ") + v.toFixed(dig_frac)).slice(-dig);
 }
 
